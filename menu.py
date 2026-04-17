@@ -10,6 +10,8 @@ from tkinter import PhotoImage, messagebox  #<- agraga el message box
 from Cliente import agregar_cliente_db, modificar_cliente_db, eliminar_cliente_db, obtener_cliente_db
 from auto import agregar_auto_db, modificar_auto_db, eliminar_auto_db, obtener_auto_db
 
+app=ctk.CTk()
+
 def crear_ventana_titulo(titulo):
     ventana_aux=ctk.CTkToplevel()
     ventana_aux.title(titulo)
@@ -446,3 +448,4 @@ ventana.configure(menu=menu_principal)
 
 #Iniciar el bucle principal de la ventana
 ventana.mainloop()
+app.mainloop()
