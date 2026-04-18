@@ -13,7 +13,7 @@ from auto import agregar_auto_db, modificar_auto_db, eliminar_auto_db, obtener_a
 def crear_ventana_titulo(titulo):
     ventana_aux=ctk.CTkToplevel()
     ventana_aux.title(titulo)
-    ventana_aux.geometry("750x400")
+    ventana_aux.geometry("750x500")
     ventana_aux.grab_set()  # Evita que se pueda interactuar con la ventana principal
     ventana_aux.configure(bg="lightblue")
     ventana_aux.resizable(True, True)
@@ -22,39 +22,48 @@ def crear_ventana_titulo(titulo):
 #Método para crear la interfaz para agragar clientes
 def agregar_cliente():
     ventana_agregar=crear_ventana_titulo("Agregar Cliente")
-    ctk.CTkLabel(ventana_agregar, text="Cédula:").grid(row=0, column=0, padx=10, pady=10)
-    entry_cedula=ctk.CTkEntry(ventana_agregar)
+
+    contenedor=ctk.CTkFrame(ventana_agregar)
+    contenedor.pack(expand=True, fill="both", padx=100, pady=20)
+
+    contenedor.grid_columnconfigure(0, weight=1)
+    contenedor.grid_columnconfigure(1, weight=2)
+    contenedor.grid_columnconfigure(2, weight=1)
+    contenedor.grid_columnconfigure(3, weight=2)
+
+    ctk.CTkLabel(contenedor, text="Cédula:").grid(row=0, column=0, padx=10, pady=10)
+    entry_cedula=ctk.CTkEntry(contenedor)
     entry_cedula.grid(row=0, column=1, padx=80, pady=10)
 
-    ctk.CTkLabel(ventana_agregar, text="Nombres:").grid(row=0, column=2, padx=10, pady=10)
-    entry_nombres=ctk.CTkEntry(ventana_agregar)
+    ctk.CTkLabel(contenedor, text="Nombres:").grid(row=0, column=2, padx=10, pady=10)
+    entry_nombres=ctk.CTkEntry(contenedor)
     entry_nombres.grid(row=0, column=3, padx=10, pady=10)
 
-    ctk.CTkLabel(ventana_agregar, text="Apellidos:").grid(row=1, column=0, padx=10, pady=10)
-    entry_apellidos=ctk.CTkEntry(ventana_agregar)
+    ctk.CTkLabel(contenedor, text="Apellidos:").grid(row=1, column=0, padx=10, pady=10)
+    entry_apellidos=ctk.CTkEntry(contenedor)
     entry_apellidos.grid(row=1, column=1, padx=80, pady=10)
 
-    ctk.CTkLabel(ventana_agregar, text="Sexo:").grid(row=1, column=2, padx=10, pady=10)
-    entry_sexo=ctk.CTkEntry(ventana_agregar)
+    ctk.CTkLabel(contenedor, text="Sexo:").grid(row=1, column=2, padx=10, pady=10)
+    entry_sexo=ctk.CTkEntry(contenedor)
     entry_sexo.grid(row=1, column=3, padx=10, pady=10)
 
-    ctk.CTkLabel(ventana_agregar, text="Dirección:").grid(row=2, column=0, padx=10, pady=10)
-    entry_direccion=ctk.CTkEntry(ventana_agregar)
+    ctk.CTkLabel(contenedor, text="Dirección:").grid(row=2, column=0, padx=10, pady=10)
+    entry_direccion=ctk.CTkEntry(contenedor)
     entry_direccion.grid(row=2, column=1, padx=80, pady=10)
 
-    ctk.CTkLabel(ventana_agregar, text="Teléfono:").grid(row=2, column=2, padx=10, pady=10)
-    entry_telefono=ctk.CTkEntry(ventana_agregar)
+    ctk.CTkLabel(contenedor, text="Teléfono:").grid(row=2, column=2, padx=10, pady=10)
+    entry_telefono=ctk.CTkEntry(contenedor)
     entry_telefono.grid(row=2, column=3, padx=10, pady=10)
 
-    ctk.CTkLabel(ventana_agregar, text="Correo:").grid(row=3, column=0, padx=10, pady=10)
-    entry_correo=ctk.CTkEntry(ventana_agregar)
+    ctk.CTkLabel(contenedor, text="Correo:").grid(row=3, column=0, padx=10, pady=10)
+    entry_correo=ctk.CTkEntry(contenedor)
     entry_correo.grid(row=3, column=1, padx=80, pady=10)
 
-    ctk.CTkLabel(ventana_agregar, text="Fecha de nacimiento:").grid(row=3, column=2, padx=10, pady=10)
-    entry_fecha_nac=ctk.CTkEntry(ventana_agregar)
+    ctk.CTkLabel(contenedor, text="Fecha de nacimiento:").grid(row=3, column=2, padx=10, pady=10)
+    entry_fecha_nac=ctk.CTkEntry(contenedor)
     entry_fecha_nac.grid(row=3, column=3, padx=10, pady=10)
     
-    ctk.CTkButton(ventana_agregar, text="Guardar", command=lambda:
+    ctk.CTkButton(contenedor, text="Guardar", command=lambda:
     guardar_datos("Agregar", 
                   entry_cedula.get(),
                   entry_nombres.get(),
@@ -69,43 +78,52 @@ def agregar_cliente():
 #Método para crear la interfaz para modificar clientes
 def modificar_cliente():
     ventana_modificar=crear_ventana_titulo("Modificar Cliente")
-    ctk.CTkLabel(ventana_modificar, text="Id del cliente:").grid(row=0, column=0, padx=10, pady=10)
-    entry_id=ctk.CTkEntry(ventana_modificar)
+
+    contenedor=ctk.CTkFrame(ventana_modificar)
+    contenedor.pack(expand=True, fill="both", padx=100, pady=20)
+
+    contenedor.grid_columnconfigure(0, weight=1)
+    contenedor.grid_columnconfigure(1, weight=2)
+    contenedor.grid_columnconfigure(2, weight=1)
+    contenedor.grid_columnconfigure(3, weight=2)
+
+    ctk.CTkLabel(contenedor, text="Id del cliente:").grid(row=0, column=0, padx=10, pady=10)
+    entry_id=ctk.CTkEntry(contenedor)
     entry_id.grid(row=0, column=1, padx=80, pady=10)
     
-    ctk.CTkLabel(ventana_modificar, text="Cédula:").grid(row=0, column=2, padx=10, pady=10)
-    entry_cedula=ctk.CTkEntry(ventana_modificar)
+    ctk.CTkLabel(contenedor, text="Cédula:").grid(row=0, column=2, padx=10, pady=10)
+    entry_cedula=ctk.CTkEntry(contenedor)
     entry_cedula.grid(row=0, column=3, padx=10, pady=10)
 
-    ctk.CTkLabel(ventana_modificar, text="Nombres:").grid(row=1, column=0, padx=10, pady=10)
-    entry_nombres=ctk.CTkEntry(ventana_modificar)
+    ctk.CTkLabel(contenedor, text="Nombres:").grid(row=1, column=0, padx=10, pady=10)
+    entry_nombres=ctk.CTkEntry(contenedor)
     entry_nombres.grid(row=1, column=1, padx=80, pady=10)
 
-    ctk.CTkLabel(ventana_modificar, text="Apellidos:").grid(row=1, column=2, padx=10, pady=10)
-    entry_apellidos=ctk.CTkEntry(ventana_modificar)
+    ctk.CTkLabel(contenedor, text="Apellidos:").grid(row=1, column=2, padx=10, pady=10)
+    entry_apellidos=ctk.CTkEntry(contenedor)
     entry_apellidos.grid(row=1, column=3, padx=10, pady=10)
 
-    ctk.CTkLabel(ventana_modificar, text="Sexo:").grid(row=2, column=0, padx=10, pady=10)
-    entry_sexo=ctk.CTkEntry(ventana_modificar)
+    ctk.CTkLabel(contenedor, text="Sexo:").grid(row=2, column=0, padx=10, pady=10)
+    entry_sexo=ctk.CTkEntry(contenedor)
     entry_sexo.grid(row=2, column=1, padx=80, pady=10)
 
-    ctk.CTkLabel(ventana_modificar, text="Dirección:").grid(row=2, column=2, padx=10, pady=10)
-    entry_direccion=ctk.CTkEntry(ventana_modificar)
+    ctk.CTkLabel(contenedor, text="Dirección:").grid(row=2, column=2, padx=10, pady=10)
+    entry_direccion=ctk.CTkEntry(contenedor)
     entry_direccion.grid(row=2, column=3, padx=10, pady=10)
 
-    ctk.CTkLabel(ventana_modificar, text="Teléfono:").grid(row=3, column=0, padx=10, pady=10)
-    entry_telefono=ctk.CTkEntry(ventana_modificar)
+    ctk.CTkLabel(contenedor, text="Teléfono:").grid(row=3, column=0, padx=10, pady=10)
+    entry_telefono=ctk.CTkEntry(contenedor)
     entry_telefono.grid(row=3, column=1, padx=80, pady=10)
 
-    ctk.CTkLabel(ventana_modificar, text="Correo:").grid(row=3, column=2, padx=10, pady=10)
-    entry_correo=ctk.CTkEntry(ventana_modificar)
+    ctk.CTkLabel(contenedor, text="Correo:").grid(row=3, column=2, padx=10, pady=10)
+    entry_correo=ctk.CTkEntry(contenedor)
     entry_correo.grid(row=3, column=3, padx=10, pady=10)
 
-    ctk.CTkLabel(ventana_modificar, text="Fecha de nacimiento:").grid(row=4, column=0, padx=10, pady=10)
-    entry_fecha_nac=ctk.CTkEntry(ventana_modificar)
+    ctk.CTkLabel(contenedor, text="Fecha de nacimiento:").grid(row=4, column=0, padx=10, pady=10)
+    entry_fecha_nac=ctk.CTkEntry(contenedor)
     entry_fecha_nac.grid(row=4, column=1, padx=80, pady=10)
     
-    ctk.CTkButton(ventana_modificar, text="Guardar", command=lambda:
+    ctk.CTkButton(contenedor, text="Guardar", command=lambda:
     guardar_datos("Modificar",
                   entry_cedula.get(),
                   entry_nombres.get(),
@@ -155,17 +173,24 @@ def modificar_cliente():
             messagebox.showwarning("Atención", "Ingrese un ID")
 
 #Botón Buscar
-    ctk.CTkButton(ventana_modificar, text="Buscar", command=cargar_dato_cliente).grid(row=6, column=0, columnspan=4, pady=5)
+    ctk.CTkButton(contenedor, text="Buscar", command=cargar_dato_cliente).grid(row=6, column=0, columnspan=4, pady=5)
             
 
 #Método para crear la interfaz para eliminar clientes
 def eliminar_cliente():
     ventana_agregar=crear_ventana_titulo("Eliminar Cliente")
-    ctk.CTkLabel(ventana_agregar, text="Id del cliente que desea borrar:").grid(row=0, column=0, padx=10, pady=5)
+
+    contenedor=ctk.CTkFrame(ventana_agregar)
+    contenedor.pack(expand=True, fill="both", padx=100, pady=20)
+
+    contenedor.grid_columnconfigure(0, weight=1)
+    contenedor.grid_columnconfigure(1, weight=2)
+
+    ctk.CTkLabel(contenedor, text="Id del cliente que desea borrar:").grid(row=0, column=0, padx=10, pady=5)
     
-    entry_id=ctk.CTkEntry(ventana_agregar)
+    entry_id=ctk.CTkEntry(contenedor)
     entry_id.grid(row=0, column=1, padx=10, pady=5)
-    ctk.CTkButton(ventana_agregar, text="Confirmar", command=lambda:
+    ctk.CTkButton(contenedor, text="Confirmar", command=lambda:
     eliminar_datos("Eliminar", entry_id.get())).grid(row=1, column=0, columnspan=2, pady=10)
 
 
@@ -295,55 +320,64 @@ def agregar_autos():
 #Método para crear la interfaz para modificar autos
 def modificar_autos():
     ventana_modificar_auto=crear_ventana_titulo("Modificar Auto")
-    ctk.CTkLabel(ventana_modificar_auto, text="Id del Auto:").grid(row=0, column=0, padx=10, pady=10)
-    entry_id_auto=ctk.CTkEntry(ventana_modificar_auto)
+
+    contenedor=ctk.CTkFrame(ventana_modificar_auto)
+    contenedor.pack(expand=True, fill="both", padx=100, pady=20)
+
+    contenedor.grid_columnconfigure(0, weight=1)
+    contenedor.grid_columnconfigure(1, weight=2)    
+    contenedor.grid_columnconfigure(2, weight=1)
+    contenedor.grid_columnconfigure(3, weight=2)
+
+    ctk.CTkLabel(contenedor, text="Id del Auto:").grid(row=0, column=0, padx=10, pady=10)
+    entry_id_auto=ctk.CTkEntry(contenedor)
     entry_id_auto.grid(row=0, column=1, padx=80, pady=10)
     
-    ctk.CTkLabel(ventana_modificar_auto, text="Código:").grid(row=0, column=2, padx=10, pady=10)
-    entry_código=ctk.CTkEntry(ventana_modificar_auto)
+    ctk.CTkLabel(contenedor, text="Código:").grid(row=0, column=2, padx=10, pady=10)
+    entry_código=ctk.CTkEntry(contenedor)
     entry_código.grid(row=0, column=3, padx=10, pady=10)
 
-    ctk.CTkLabel(ventana_modificar_auto, text="Matrícula:").grid(row=1, column=0, padx=10, pady=10)
-    entry_matrícula=ctk.CTkEntry(ventana_modificar_auto)
+    ctk.CTkLabel(contenedor, text="Matrícula:").grid(row=1, column=0, padx=10, pady=10)
+    entry_matrícula=ctk.CTkEntry(contenedor)
     entry_matrícula.grid(row=1, column=1, padx=80, pady=10)
 
-    ctk.CTkLabel(ventana_modificar_auto, text="Descripción:").grid(row=1, column=2, padx=10, pady=10)
-    entry_descripción=ctk.CTkEntry(ventana_modificar_auto)
+    ctk.CTkLabel(contenedor, text="Descripción:").grid(row=1, column=2, padx=10, pady=10)
+    entry_descripción=ctk.CTkEntry(contenedor)
     entry_descripción.grid(row=1, column=3, padx=10, pady=10)
 
-    ctk.CTkLabel(ventana_modificar_auto, text="Marca:").grid(row=2, column=0, padx=10, pady=10)
-    entry_marca=ctk.CTkEntry(ventana_modificar_auto)
+    ctk.CTkLabel(contenedor, text="Marca:").grid(row=2, column=0, padx=10, pady=10)
+    entry_marca=ctk.CTkEntry(contenedor)
     entry_marca.grid(row=2, column=1, padx=80, pady=10)
 
-    ctk.CTkLabel(ventana_modificar_auto, text="Tipo:").grid(row=2, column=2, padx=10, pady=10)
-    entry_tipo=ctk.CTkEntry(ventana_modificar_auto)
+    ctk.CTkLabel(contenedor, text="Tipo:").grid(row=2, column=2, padx=10, pady=10)
+    entry_tipo=ctk.CTkEntry(contenedor)
     entry_tipo.grid(row=2, column=3, padx=10, pady=10)
 
-    ctk.CTkLabel(ventana_modificar_auto, text="Modelo:").grid(row=3, column=0, padx=10, pady=10)
-    entry_modelo=ctk.CTkEntry(ventana_modificar_auto)
+    ctk.CTkLabel(contenedor, text="Modelo:").grid(row=3, column=0, padx=10, pady=10)
+    entry_modelo=ctk.CTkEntry(contenedor)
     entry_modelo.grid(row=3, column=1, padx=80, pady=10)
 
-    ctk.CTkLabel(ventana_modificar_auto, text="Color 1:").grid(row=3, column=2, padx=10, pady=10)
-    entry_color_1=ctk.CTkEntry(ventana_modificar_auto)
+    ctk.CTkLabel(contenedor, text="Color 1:").grid(row=3, column=2, padx=10, pady=10)
+    entry_color_1=ctk.CTkEntry(contenedor)
     entry_color_1.grid(row=3, column=3, padx=10, pady=10)
 
-    ctk.CTkLabel(ventana_modificar_auto, text="Color 2:").grid(row=4, column=0, padx=10, pady=10)
-    entry_color_2=ctk.CTkEntry(ventana_modificar_auto)
+    ctk.CTkLabel(contenedor, text="Color 2:").grid(row=4, column=0, padx=10, pady=10)
+    entry_color_2=ctk.CTkEntry(contenedor)
     entry_color_2.grid(row=4, column=1, padx=80, pady=10)
 
-    ctk.CTkLabel(ventana_modificar_auto, text="Número de pasajeros:").grid(row=4, column=2, padx=10, pady=10)
-    entry_nro_pasajeros=ctk.CTkEntry(ventana_modificar_auto)
+    ctk.CTkLabel(contenedor, text="Número de pasajeros:").grid(row=4, column=2, padx=10, pady=10)
+    entry_nro_pasajeros=ctk.CTkEntry(contenedor)
     entry_nro_pasajeros.grid(row=4, column=3, padx=10, pady=10)
 
-    ctk.CTkLabel(ventana_modificar_auto, text="Año de fabricación:").grid(row=5, column=0, padx=10, pady=10)
-    entry_año_auto=ctk.CTkEntry(ventana_modificar_auto)
+    ctk.CTkLabel(contenedor, text="Año de fabricación:").grid(row=5, column=0, padx=10, pady=10)
+    entry_año_auto=ctk.CTkEntry(contenedor)
     entry_año_auto.grid(row=5, column=1, padx=80, pady=10)
 
-    ctk.CTkLabel(ventana_modificar_auto, text="Tipo de combustible:").grid(row=5, column=2, padx=10, pady=10)
-    entry_combustible=ctk.CTkEntry(ventana_modificar_auto)
+    ctk.CTkLabel(contenedor, text="Tipo de combustible:").grid(row=5, column=2, padx=10, pady=10)
+    entry_combustible=ctk.CTkEntry(contenedor)
     entry_combustible.grid(row=5, column=3, padx=10, pady=10)
     
-    ctk.CTkButton(ventana_modificar_auto, text="Guardar", command=lambda:
+    ctk.CTkButton(contenedor, text="Guardar", command=lambda:
     guardar_datos_auto("Modificar", 
                        entry_id_auto.get(),
                        entry_código.get(),
@@ -405,16 +439,24 @@ def modificar_autos():
             messagebox.showwarning("Atención", "Ingrese el Id del auto")
 
 #Botón Buscar
-    ctk.CTkButton(ventana_modificar_auto, text="Buscar", command=cargar_dato_auto).grid(row=7, column=0, columnspan=4, pady=10)
+    ctk.CTkButton(contenedor, text="Buscar", command=cargar_dato_auto).grid(row=7, column=0, columnspan=4, pady=10)
             
 
 #Método para crear la interfaz para eliminar autos
 def eliminar_autos():
     ventana_agregar_auto=crear_ventana_titulo("Eliminar Auto")
-    ctk.CTkLabel(ventana_agregar_auto, text="Id del auto que desea borrar:").grid(row=0, column=0, padx=10, pady=10)
-    entry_id_auto=ctk.CTkEntry(ventana_agregar_auto)
+
+    contenedor=ctk.CTkFrame(ventana_agregar_auto)
+    contenedor.pack(expand=True, fill="both", padx=100, pady=20)
+
+    contenedor.grid_columnconfigure(0, weight=1)
+    contenedor.grid_columnconfigure(1, weight=2)
+
+    ctk.CTkLabel(contenedor, text="Id del auto que desea borrar:").grid(row=0, column=0, padx=10, pady=10)
+    
+    entry_id_auto=ctk.CTkEntry(contenedor)
     entry_id_auto.grid(row=1, column=0, padx=10, pady=10)
-    ctk.CTkButton(ventana_agregar_auto, text="Confirmar", command=lambda:
+    ctk.CTkButton(contenedor, text="Confirmar", command=lambda:
     eliminar_datos_auto("Eliminar", entry_id_auto.get())).grid(row=2, column=0, columnspan=2, pady=10)
 
 def guardar_datos_auto(accion, código=None, matrícula=None, descripción=None, marca=None, tipo=None, modelo=None, color_1=None, color_2=None, nro_pasajeros=None, año_auto=None, combustible=None, id_auto=None):
