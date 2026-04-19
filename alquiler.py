@@ -13,7 +13,7 @@ def conectar_con_base_datos():
                                    port='3306')
 
 #Método para agragar cliente en la base de datos
-def agregar_alquiler_db(código_alquiler, cédula_cliente, cod_auto, fecha_alquiler, observación_alquiler, estado_alquiler, kilometraje_alquiler, descuento_alquiler, valor_alquiler):
+def agregar_registro_db(código_alquiler, cédula_cliente, cod_auto, fecha_alquiler, observación_alquiler, estado_alquiler, kilometraje_alquiler, descuento_alquiler, valor_alquiler):
     conexion=conectar_con_base_datos()
     cursor=conexion.cursor()
     query="insert into Reg_alquiler(cod_alquiler, ced_cliente, cod_auto, fec_alquiler, obs_alquiler, est_alquiler, km_alquiler, desc_alquiler, val_alquiler) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
@@ -23,7 +23,7 @@ def agregar_alquiler_db(código_alquiler, cédula_cliente, cod_auto, fecha_alqui
     conexion.close()
 
 #Método para agregar autos desde la base de datos
-def obtener_alquiler_db(id):
+def obtener_registro_db(id):
     conexion=conectar_con_base_datos()
     cursor=conexion.cursor()
     query="select * from Reg_alquiler where id_alquiler=%s"
