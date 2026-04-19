@@ -60,4 +60,20 @@ def eliminar_registro_db(id_registro):
     finally:
         cursor.close()
         conexion.close()
+
+
+#Método para obtener todos los clientes desde la base de datos
+def consultar_registro_db(id):
+    conexion = conectar_con_base_datos()
+    cursor = conexion.cursor()
+    
+    query = "SELECT * FROM Reg_alquiler WHERE id_alquiler=%s"
+    cursor.execute(query,(id, ))
+    
+    alquiler = cursor.fetchone()
+    
+    cursor.close()
+    conexion.close()
+    
+    return alquiler
         

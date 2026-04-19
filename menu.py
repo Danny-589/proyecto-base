@@ -7,16 +7,19 @@
 import tkinter as tk #se la utiliza para crear la interfaz grafica
 import customtkinter as ctk #Se la utiliza para dar un mejor diseño a la interfaz
 from tkinter import PhotoImage, messagebox  #<- agraga el message box
-from Cliente import agregar_cliente_db, modificar_cliente_db, eliminar_cliente_db, obtener_cliente_db
-from auto import agregar_auto_db, modificar_auto_db, eliminar_auto_db, obtener_auto_db
-from alquiler import agregar_registro_db, modificar_registro_db, eliminar_registro_db, obtener_registro_db
+from Cliente import agregar_cliente_db, modificar_cliente_db, eliminar_cliente_db, obtener_cliente_db, consultar_cliente_db
+from auto import agregar_auto_db, modificar_auto_db, eliminar_auto_db, obtener_auto_db, consultar_auto_db
+from alquiler import agregar_registro_db, modificar_registro_db, eliminar_registro_db, obtener_registro_db, consultar_registro_db
 
 
 def crear_ventana_titulo(titulo):
     ventana_aux=ctk.CTkToplevel()
     ventana_aux.title(titulo)
     ventana_aux.geometry("750x500")
-    ventana_aux.grab_set()  # Evita que se pueda interactuar con la ventana principal
+    
+    ventana_aux.lift()  # la pone al frente
+    ventana_aux.attributes("-topmost", True)  # se asegura que aparezca encima
+
     ventana_aux.configure(bg="lightblue")
     ventana_aux.resizable(True, True)
     return ventana_aux
@@ -206,7 +209,34 @@ def eliminar_cliente():
     ctk.CTkButton(contenedor, text="Confirmar", command=lambda:
     eliminar_datos("Eliminar", entry_id.get())).grid(row=1, column=0, columnspan=2, pady=10)
 
+def consultar_cliente():
+    ventana_consultar = crear_ventana_titulo("Consultar Cliente")
 
+    contenedor = ctk.CTkFrame(ventana_consultar)
+    contenedor.pack(expand=True, fill="both", padx=100, pady=20)
+
+    ctk.CTkLabel(contenedor, text="Ingrese ID del cliente:").grid(row=0, column=0, padx=10, pady=10)
+
+    entry_id = ctk.CTkEntry(contenedor)
+    entry_id.grid(row=0, column=1, padx=10, pady=10)
+
+    resultado = ctk.CTkLabel(contenedor, text="")
+    resultado.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
+
+    def buscar():
+        id_cliente = entry_id.get()
+        if id_cliente:
+            cliente = consultar_cliente_db(id_cliente)
+            if cliente:
+                resultado.configure(
+                    text=f"Cédula: {cliente[1]}\nNombre: {cliente[2]} {cliente[3]}"
+                )
+            else:
+                    resultado.configure(text="Cliente no encontrado")
+        else:
+            resultado.configure(text="Ingrese un ID")
+
+    ctk.CTkButton(contenedor, text="Buscar", command=buscar).grid(row=2, column=0, columnspan=2, pady=10)
 
 
 def guardar_datos(accion, 
@@ -543,6 +573,35 @@ def eliminar_autos():
     eliminar_datos_auto("Eliminar", entry_id_auto.get())).grid(row=2, column=0, columnspan=2, pady=10)
 
 
+def consultar_autos():
+    ventana_consultar = crear_ventana_titulo("Consultar Auto")
+
+    contenedor = ctk.CTkFrame(ventana_consultar)
+    contenedor.pack(expand=True, fill="both", padx=100, pady=20)
+
+    ctk.CTkLabel(contenedor, text="Ingrese ID del auto:").grid(row=0, column=0, padx=10, pady=10)
+
+    entry_id_auto = ctk.CTkEntry(contenedor)
+    entry_id_auto.grid(row=0, column=1, padx=10, pady=10)
+
+    resultado = ctk.CTkLabel(contenedor, text="")
+    resultado.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
+
+    def buscar():
+        id_auto = entry_id_auto.get()
+        if id_auto:
+            auto = consultar_auto_db(id_auto)
+            if auto:
+                resultado.configure(
+                    text=f"Cédula: {auto[1]}\nNombre: {auto[2]} {auto[3]}"
+                )
+            else:
+                    resultado.configure(text="Cliente no encontrado")
+        else:
+            resultado.configure(text="Ingrese un ID")
+
+    ctk.CTkButton(contenedor, text="Buscar", command=buscar).grid(row=2, column=0, columnspan=2, pady=10)
+
 
 
 def guardar_datos_auto(accion, código=None, matrícula=None, descripción=None, marca=None, tipo=None, modelo=None, color_1=None, color_2=None, nro_pasajeros=None, año_auto=None, combustible=None, id_auto=None):
@@ -860,6 +919,34 @@ def eliminar_registro():
     ctk.CTkButton(contenedor, text="Confirmar", command=lambda:
     eliminar_datos_alquiler("Eliminar", entry_id_auto.get())).grid(row=2, column=0, columnspan=2, pady=10)
 
+def consultar_registro():
+    ventana_consultar = crear_ventana_titulo("Consultar Registro de Alquiler")
+
+    contenedor = ctk.CTkFrame(ventana_consultar)
+    contenedor.pack(expand=True, fill="both", padx=100, pady=20)
+
+    ctk.CTkLabel(contenedor, text="Ingrese ID del registro:").grid(row=0, column=0, padx=10, pady=10)
+
+    entry_id_alquiler = ctk.CTkEntry(contenedor)
+    entry_id_alquiler.grid(row=0, column=1, padx=10, pady=10)
+
+    resultado = ctk.CTkLabel(contenedor, text="")
+    resultado.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
+
+    def buscar():
+        id_alquiler = entry_id_alquiler.get()
+        if id_alquiler:
+            reg = consultar_registro_db(id_alquiler)
+            if reg:
+                resultado.configure(
+                    text=f"Cédula: {reg[1]}\nNombre: {reg[2]} {reg[3]}"
+                )
+            else:
+                    resultado.configure(text="Cliente no encontrado")
+        else:
+            resultado.configure(text="Ingrese un ID")
+
+    ctk.CTkButton(contenedor, text="Buscar", command=buscar).grid(row=2, column=0, columnspan=2, pady=10)
 
 
 
@@ -993,7 +1080,7 @@ menu_clientes = tk.Menu(menu_principal,tearoff=0)
 menu_clientes.add_command(label="Agregar", font=("arial", 10), command=agregar_cliente)
 menu_clientes.add_command(label="Modificar", font=("arial", 10), command=modificar_cliente)
 menu_clientes.add_command(label="Eliminar", font=("arial", 10), command=eliminar_cliente)
-menu_clientes.add_command(label="Consultar", font=("arial", 10), command="consultar_cliente")
+menu_clientes.add_command(label="Consultar", font=("arial", 10), command=consultar_cliente)
 menu_principal.add_cascade(label="Clientes", menu=menu_clientes)
 
 
@@ -1003,7 +1090,7 @@ menu_autos = tk.Menu(menu_principal,tearoff=0)
 menu_autos.add_command(label="Agregar", font=("arial", 10), command=agregar_autos)
 menu_autos.add_command(label="Modificar", font=("arial", 10), command=modificar_autos)
 menu_autos.add_command(label="Eliminar", font=("arial", 10), command=eliminar_autos)
-menu_autos.add_command(label="Consultar", font=("arial", 10), command="consultar_autos")
+menu_autos.add_command(label="Consultar", font=("arial", 10), command=consultar_autos)
 menu_principal.add_cascade(label="Autos", menu=menu_autos)
 
 
@@ -1014,7 +1101,7 @@ menu_alquiler = tk.Menu(menu_principal,tearoff=0)
 menu_alquiler.add_command(label="Agregar", font=("arial", 10), command=agregar_registro)
 menu_alquiler.add_command(label="Modificar", font=("arial", 10), command=modificar_registro)
 menu_alquiler.add_command(label="Eliminar", font=("arial", 10), command=eliminar_registro)
-menu_alquiler.add_command(label="Consultar", font=("arial", 10), command="consultar_registro")
+menu_alquiler.add_command(label="Consultar", font=("arial", 10), command=consultar_registro)
 menu_principal.add_cascade(label="Alquiler", menu=menu_alquiler)
 
 

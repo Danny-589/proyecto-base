@@ -60,3 +60,18 @@ def eliminar_cliente_db(id):
     finally:
         cursor.close()
         conexion.close()
+
+#Método para obtener todos los clientes desde la base de datos
+def consultar_cliente_db(id):
+    conexion = conectar_con_base_datos()
+    cursor = conexion.cursor()
+    
+    query = "SELECT * FROM cliente WHERE id_cliente=%s"
+    cursor.execute(query,(id, ))
+    
+    clientes = cursor.fetchone()
+    
+    cursor.close()
+    conexion.close()
+    
+    return clientes

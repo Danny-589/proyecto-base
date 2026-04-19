@@ -61,3 +61,18 @@ def eliminar_auto_db(id):
         cursor.close()
         conexion.close()
         
+
+#Método para obtener todos los clientes desde la base de datos
+def consultar_auto_db(id):
+    conexion = conectar_con_base_datos()
+    cursor = conexion.cursor()
+    
+    query = "SELECT * FROM auto WHERE id_auto=%s"
+    cursor.execute(query,(id, ))
+    
+    autos = cursor.fetchone()
+    
+    cursor.close()
+    conexion.close()
+    
+    return autos
