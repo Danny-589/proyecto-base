@@ -10,15 +10,70 @@ from tkinter import PhotoImage, messagebox  #<- agraga el message box
 from Cliente import agregar_cliente_db, modificar_cliente_db, eliminar_cliente_db, obtener_cliente_db, consultar_cliente_db
 from auto import agregar_auto_db, modificar_auto_db, eliminar_auto_db, obtener_auto_db, consultar_auto_db
 from alquiler import agregar_registro_db, modificar_registro_db, eliminar_registro_db, obtener_registro_db, consultar_registro_db
+from usuario import agregar_usuario_db, verificar_usuario_db
+import math
+from PIL import Image, ImageTk, ImageFilter
 
+class AnimatedBackground(tk.Canvas):
+    def __init__(self, parent, image_path, *args, **kwargs):
+        super().__init__(parent, highlightthickness=0, *args, **kwargs)
+        self.image_path = image_path
+        self.angle = 0
+        self.bg_img = None
+        self.img_item = None
+        try:
+            # Difuminar la imagen estáticamente para no consumir CPU y aplicar resize responsivo
+            self.pil_img_orig = Image.open(image_path).filter(ImageFilter.GaussianBlur(30))
+        except Exception as e:
+            print("Error cargando fondo:", e)
+            self.pil_img_orig = None
+        
+        self.bind("<Configure>", self.on_resize)
+        self.animate()
+
+    def on_resize(self, event):
+        if not self.pil_img_orig: return
+        self.width = event.width
+        self.height = event.height
+        if self.width <= 1 or self.height <= 1: return
+        
+        # Redimensionado dinámico a las medidas de ventana, manteniendo margen para paneo
+        pil_img = self.pil_img_orig.resize((int(self.width * 1.5), int(self.height * 1.5)), Image.Resampling.NEAREST)
+        self.bg_img = ImageTk.PhotoImage(pil_img)
+        
+        if self.img_item is None:
+            self.img_item = self.create_image(0, 0, image=self.bg_img, anchor="center")
+        else:
+            self.itemconfig(self.img_item, image=self.bg_img)
+
+    def animate(self):
+        try:
+            if hasattr(self, 'width') and self.img_item is not None:
+                # Rotación en órbita escalada
+                radius = min(self.width, self.height) * 0.1
+                x = (self.width / 2) + radius * math.cos(self.angle)
+                y = (self.height / 2) + radius * math.sin(self.angle)
+                self.coords(self.img_item, x, y)
+                self.angle += 0.05
+                if self.angle >= math.pi * 2:
+                    self.angle = 0
+            self.after(16, self.animate) # 60 FPS fluido
+        except:
+            pass  # Widget fue destruido
 
 def crear_ventana_titulo(titulo):
-    ventana_aux=ctk.CTkToplevel()
+    ventana_aux=ctk.CTkToplevel(ventana)  # Ahora se asigna la ventana principal como "padre"
     ventana_aux.title(titulo)
     ventana_aux.geometry("750x500")
     
-    ventana_aux.lift()  # la pone al frente
-    ventana_aux.attributes("-topmost", True)  # se asegura que aparezca encima
+    ventana_aux.transient(ventana) # Asegura que NUNCA se oculte detrás de la ventana principal
+    ventana_aux.lift()
+    ventana_aux.focus_force()
+    ventana_aux.grab_set() # Para asegurar enfoque al presionar
+    
+    # Aparece al frente como Registro, pero permite otras apps encima en Windows
+    ventana_aux.attributes("-topmost", True)
+    ventana_aux.after(50, lambda: ventana_aux.attributes("-topmost", False)) 
 
     ventana_aux.configure(bg="lightblue")
     ventana_aux.resizable(True, True)
@@ -1050,20 +1105,157 @@ def eliminar_datos_alquiler(accion, id_alquiler=None):
 def salir():
     ventana.destroy()
 
+def iniciar_sesion(usuario, password, window):
+    # Uso de la base de datos real
+    if verificar_usuario_db(usuario, password):
+        messagebox.showinfo("Éxito", "Bienvenido Administrador/Dueño al Sistema")
+        window.withdraw()  # Se oculta en vez de destruir para evitar errores de Tcl del hilo 'after'
+        ventana.deiconify()  # Muestra la ventana principal
+    else:
+        messagebox.showerror("Error", "Usuario o contraseña incorrectos.\nSolo administradores autorizados.")
+
+def abrir_registro_admin(window_padre):
+    ventana_reg = ctk.CTkToplevel(window_padre)
+    ventana_reg.title("Register")
+    ventana_reg.geometry("500x700")
+    ventana_reg.lift()
+    ventana_reg.attributes("-topmost", True)
+    ventana_reg.after(10, lambda: ventana_reg.attributes("-topmost", False))
+    
+    # Agregar fondo animado responsivo
+    bg = AnimatedBackground(ventana_reg, "assets/fluid_bg.png")
+    bg.place(x=0, y=0, relwidth=1, relheight=1)
+
+    # Contenedor central (dark mode)
+    contenedor = ctk.CTkFrame(ventana_reg, fg_color="#0A1931", corner_radius=15, border_width=1, border_color="#1E3A8A")
+    contenedor.pack(expand=True, fill="both", padx=40, pady=30)
+
+    ctk.CTkLabel(contenedor, text="Register", font=("Arial", 28, "bold"), text_color="white").pack(pady=(20, 25))
+
+    # Helper function for themed entries
+    def create_theme_entry(container, placeholder, is_password=False):
+        e = ctk.CTkEntry(
+            container, 
+            placeholder_text=placeholder, 
+            height=40, 
+            border_width=1, 
+            border_color="#1E3A8A", 
+            fg_color="#050C1A",
+            text_color="white",
+            placeholder_text_color="gray",
+            show="*" if is_password else ""
+        )
+        e.pack(fill="x", padx=30, pady=8)
+        return e
+
+    entry_nombres = create_theme_entry(contenedor, "Nombres")
+    entry_apellidos = create_theme_entry(contenedor, "Apellidos")
+    entry_usuario = create_theme_entry(contenedor, "Usuario")
+    entry_fecha = create_theme_entry(contenedor, "Fecha de Nacimiento (AAAA-MM-DD)")
+    entry_correo = create_theme_entry(contenedor, "Correo Electrónico")
+    entry_recuperacion = create_theme_entry(contenedor, "Núm. Recuperación")
+    entry_pass = create_theme_entry(contenedor, "Contraseña", is_password=True)
+    entry_pass_conf = create_theme_entry(contenedor, "Confirmar Contraseña", is_password=True)
+
+    def registrar():
+        nombres = entry_nombres.get()
+        apellidos = entry_apellidos.get()
+        usuario = entry_usuario.get()
+        fecha_nac = entry_fecha.get()
+        correo = entry_correo.get()
+        num_reco = entry_recuperacion.get()
+        password = entry_pass.get()
+        pass_conf = entry_pass_conf.get()
+
+        if nombres and apellidos and usuario and fecha_nac and correo and num_reco and password and pass_conf:
+            if password != pass_conf:
+                messagebox.showerror("Error", "Las contraseñas no coinciden.")
+                return
+
+            exito = agregar_usuario_db(nombres, apellidos, usuario, fecha_nac, correo, num_reco, password)
+            if exito:
+                messagebox.showinfo("Éxito", "Usuario registrado correctamente.\nIniciando sesión del administrador automáticamente...")
+                ventana_reg.withdraw()
+                window_padre.withdraw()
+                ventana.deiconify()
+            else:
+                messagebox.showerror("Error", "No se pudo registrar. Es posible que el correo o usuario ya estén en uso.")
+        else:
+            messagebox.showwarning("Atención", "Todos los campos son obligatorios.")
+
+    btn_registrar = ctk.CTkButton(
+        contenedor, 
+        text="Create Account", 
+        height=40,
+        fg_color="#F97316",
+        hover_color="#EA580C",
+        font=("Arial", 16, "bold"),
+        text_color="white",
+        command=registrar
+    )
+    btn_registrar.pack(fill="x", padx=30, pady=(20, 10))
+
+    btn_cancel = ctk.CTkButton(
+        contenedor,
+        text="Cancel",
+        height=40,
+        fg_color="#1E3A8A",
+        hover_color="#1E40AF",
+        text_color="white",
+        command=ventana_reg.destroy
+    )
+    btn_cancel.pack(fill="x", padx=30, pady=5)
+
+
+def mostrar_login():
+    login_window = ctk.CTkToplevel()
+    login_window.title("Login")
+    login_window.geometry("500x600")
+    
+    login_window.lift()
+    login_window.attributes("-topmost", True)
+    login_window.after(10, lambda: login_window.attributes("-topmost", False))
+    
+    login_window.protocol("WM_DELETE_WINDOW", salir)
+
+    # Animated Background Layer responsivo
+    bg = AnimatedBackground(login_window, "assets/fluid_bg.png")
+    bg.place(x=0, y=0, relwidth=1, relheight=1)
+
+    # UI Container
+    contenedor = ctk.CTkFrame(login_window, fg_color="#0A1931", corner_radius=15, border_width=1, border_color="#1E3A8A")
+    contenedor.pack(expand=True, fill="both", padx=50, pady=50)
+
+    ctk.CTkLabel(contenedor, text="Welcome Back", font=("Arial", 28, "bold"), text_color="white").pack(pady=(20, 10))
+    ctk.CTkLabel(contenedor, text="Panel Exclusivo para Administradores", font=("Arial", 12), text_color="#94A3B8").pack(pady=(0, 20))
+
+    entry_user = ctk.CTkEntry(contenedor, placeholder_text="Usuario / Correo", height=40, border_width=1, border_color="#1E3A8A", fg_color="#050C1A", text_color="white", placeholder_text_color="gray")
+    entry_user.pack(fill="x", padx=30, pady=10)
+
+    entry_pass = ctk.CTkEntry(contenedor, placeholder_text="Contraseña", show="*", height=40, border_width=1, border_color="#1E3A8A", fg_color="#050C1A", text_color="white", placeholder_text_color="gray")
+    entry_pass.pack(fill="x", padx=30, pady=10)
+
+    ctk.CTkButton(contenedor, text="Log In", height=40, fg_color="#F97316", hover_color="#EA580C", font=("Arial", 16, "bold"), text_color="white", command=lambda: iniciar_sesion(entry_user.get(), entry_pass.get(), login_window)).pack(fill="x", padx=30, pady=25)
+    
+    ctk.CTkLabel(contenedor, text="¿Eres nuevo dueño/administrador?", text_color="gray").pack(pady=5)
+    ctk.CTkButton(contenedor, text="Crear Cuenta", height=35, fg_color="transparent", border_width=1, border_color="#1E3A8A", text_color="white", hover_color="#1E40AF", command=lambda: abrir_registro_admin(login_window)).pack(pady=5)
+
 
 
 #Crear ventana principal
 ventana=ctk.CTk()
 ventana.geometry("1200x800")
 ventana.title("SISTEMA DE ALQUILER DE AUTOS")
+ventana.withdraw() # Ocultamos la ventana principal hasta iniciar sesión
 
 
 
-#Incluir fondo y logo
-background_image=PhotoImage(file="FOndo.png") 
-#logo_image= PhotoImage(file="logotipo.png") 
+#Incluir fondo y logo con viñeta difuminada
+background_image=PhotoImage(file="FOndo_dark.png") 
 background_label = tk.Label(ventana, image=background_image)
 background_label.place(relwidth=1, relheight=1)
+
+#logo_image= PhotoImage(file="logotipo.png") 
 #logo_label = tk.Label(ventana, image=logo_image, bg="lightblue")
 #logo_label.place(x=10, y=10)
 
@@ -1126,6 +1318,9 @@ menu_principal.add_command(label="salir",command=salir)
 ventana.configure(menu=menu_principal)
 
 
+
+# Mostrar Login Antes de Iniciar
+mostrar_login()
 
 #Iniciar el bucle principal de la ventana
 ventana.mainloop()

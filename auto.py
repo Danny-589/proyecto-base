@@ -9,7 +9,7 @@ import mysql.connector
 def conectar_con_base_datos():
     return mysql.connector.connect(user='root', password='1234',
                                    host='127.0.0.1',
-                                   database='rentacar',
+                                   database='rentacardas',
                                    port='3306')
 
 #Método para agragar cliente en la base de datos

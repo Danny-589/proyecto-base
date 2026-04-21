@@ -1,5 +1,5 @@
-create database rentacar;
-use rentacar;
+create database rentacardas;
+use rentacardas;
 
 create table cliente (
 id_cliente int auto_increment primary key,
@@ -84,3 +84,16 @@ val_alquiler VARCHAR (10)
 );
 INSERT INTO Reg_alquiler(id_alquiler, cod_alquiler, ced_cliente, cod_auto, fec_alquiler, obs_alquiler, est_alquiler, km_alquiler, desc_alquiler, val_alquiler) VALUES 
         ("1","260112001", "1755140744", "AUCH01", "2026-01-13", "Excelente estado", "O", "40000km", "Viaje ida y vuelta a Quito", "$1000");
+
+DROP TABLE IF EXISTS usuarios;
+CREATE TABLE usuarios(
+id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+nombres VARCHAR(100) NOT NULL,
+apellidos VARCHAR(100) NOT NULL,
+usuario VARCHAR(50) UNIQUE NOT NULL,
+fecha_nacimiento DATE,
+correo VARCHAR(100) UNIQUE NOT NULL,
+numero_recuperacion VARCHAR(20),
+password VARCHAR(255) NOT NULL,
+rol VARCHAR(20) DEFAULT 'admin'
+);
