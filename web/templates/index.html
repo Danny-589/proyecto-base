@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-content">
+        <span class="badge">PREMIUM MOBILITY</span>
+        <h1>Tu viaje,<br><span>sin límites.</span></h1>
+        <p>Experimenta la libertad de conducir los vehículos más exclusivos del mercado con un servicio diseñado para tu comodidad.</p>
+        <a href="#" class="btn-primary btn-large">Explorar catálogo <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+    </div>
+    <div class="hero-image" style="background-image: url('{% static 'images/hero_car.png' %}');">
+    </div>
+</section>
+
+<div class="search-widget-container">
+    <div class="search-widget">
+        <div class="search-field">
+            <label>UBICACIÓN</label>
+            <div class="input-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <input type="text" placeholder="¿A dónde vas?">
+            </div>
+        </div>
+        <div class="search-divider"></div>
+        <div class="search-field">
+            <label>RECOGIDA</label>
+            <div class="input-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <input type="text" placeholder="dd/mm/aaaa">
+            </div>
+        </div>
+        <div class="search-divider"></div>
+        <div class="search-field">
+            <label>DEVOLUCIÓN</label>
+            <div class="input-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <input type="text" placeholder="dd/mm/aaaa">
+            </div>
+        </div>
+        <button class="btn-primary search-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> Buscar Vehículos</button>
+    </div>
+</div>
+
+<section class="categories-section">
+    <div class="section-header">
+        <h2>Categorías Destacadas</h2>
+        <p>Encuentra el ajuste perfecto para cada ocasión</p>
+    </div>
+    <div class="categories-grid">
+        <div class="category-card eco">
+            <h3>Económicos</h3>
+            <p>Eficiencia y confort para el día a día.</p>
+            <a href="#" class="link-btn">Ver todos &rarr;</a>
+        </div>
+        <div class="category-card suv">
+            <h3>SUV / 4x4</h3>
+            <p>Espacio y potencia para cualquier terreno.</p>
+            <a href="#" class="link-btn">Ver todos &rarr;</a>
+        </div>
+        <div class="category-card high-end">
+            <h3>Gama Alta</h3>
+            <p>Lujo inigualable y prestaciones premium.</p>
+            <a href="#" class="link-btn">Ver todos &rarr;</a>
+        </div>
+    </div>
+</section>
+
+<section class="vehicles-section">
+    <div class="section-header-row">
+        <h2>Vehículos Disponibles</h2>
+        <div class="filters">
+            <button class="filter-btn active">Todos</button>
+            <button class="filter-btn">Recientes</button>
+            <button class="filter-btn">Menor Precio</button>
+        </div>
+    </div>
+    
+    <div class="vehicles-grid">
+        <!-- Car 1 -->
+        <div class="vehicle-card">
+            <div class="vehicle-img-container">
+                <span class="status-badge available">DISPONIBLE</span>
+                <img src="{% static 'images/tesla.png' %}" alt="Tesla Model S Plaid">
+            </div>
+            <div class="vehicle-info">
+                <h3>Tesla Model S Plaid</h3>
+                <p class="subtitle">Eléctrico • Autopiloto • 1020 CV</p>
+                <div class="specs">
+                    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 5</span>
+                    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect></svg> 2</span>
+                    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Aut</span>
+                </div>
+                <div class="price-action">
+                    <div class="price">
+                        <span class="label">DESDE</span>
+                        <div class="amount">120€ <span class="unit">/ dia</span></div>
+                    </div>
+                    <button class="btn-primary">Reservar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Car 2 -->
+        <div class="vehicle-card">
+            <div class="vehicle-img-container">
+                <span class="status-badge available">DISPONIBLE</span>
+                <img src="{% static 'images/range_rover.png' %}" alt="Range Rover Sport">
+            </div>
+            <div class="vehicle-info">
+                <h3>Range Rover Sport</h3>
+                <p class="subtitle">Diésel MHEV • AWD • 350 CV</p>
+                <div class="specs">
+                    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 7</span>
+                    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect></svg> 4</span>
+                    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Aut</span>
+                </div>
+                <div class="price-action">
+                    <div class="price">
+                        <span class="label">DESDE</span>
+                        <div class="amount">145€ <span class="unit">/ dia</span></div>
+                    </div>
+                    <button class="btn-primary">Reservar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Car 3 -->
+        <div class="vehicle-card">
+            <div class="vehicle-img-container">
+                <span class="status-badge new-model">ÚLTIMO MODELO</span>
+                <img src="{% static 'images/porsche.png' %}" alt="Porsche 911 Carrera S">
+            </div>
+            <div class="vehicle-info">
+                <h3>Porsche 911 Carrera S</h3>
+                <p class="subtitle">Gasolina • PDK • 450 CV</p>
+                <div class="specs">
+                    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> 2</span>
+                    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect></svg> 1</span>
+                    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> PDK</span>
+                </div>
+                <div class="price-action">
+                    <div class="price">
+                        <span class="label">DESDE</span>
+                        <div class="amount">210€ <span class="unit">/ dia</span></div>
+                    </div>
+                    <button class="btn-primary">Reservar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

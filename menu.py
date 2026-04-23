@@ -1114,25 +1114,81 @@ def iniciar_sesion(usuario, password, window):
     else:
         messagebox.showerror("Error", "Usuario o contraseña incorrectos.\nSolo administradores autorizados.")
 
-def abrir_registro_admin(window_padre):
-    ventana_reg = ctk.CTkToplevel(window_padre)
-    ventana_reg.title("Register")
-    ventana_reg.geometry("500x700")
-    ventana_reg.lift()
-    ventana_reg.attributes("-topmost", True)
-    ventana_reg.after(10, lambda: ventana_reg.attributes("-topmost", False))
-    
-    # Agregar fondo animado responsivo
-    bg = AnimatedBackground(ventana_reg, "assets/fluid_bg.png")
-    bg.place(x=0, y=0, relwidth=1, relheight=1)
+def draw_login_ui(login_window):
+    for widget in login_window.winfo_children():
+        if isinstance(widget, ctk.CTkFrame):
+            widget.destroy()
 
-    # Contenedor central (dark mode)
-    contenedor = ctk.CTkFrame(ventana_reg, fg_color="#0A1931", corner_radius=15, border_width=1, border_color="#1E3A8A")
-    contenedor.pack(expand=True, fill="both", padx=40, pady=30)
+    login_window.title("Login")
+
+    contenedor = ctk.CTkFrame(login_window, fg_color="#0A1931", corner_radius=15, border_width=1, border_color="#1E3A8A")
+    
+    login_window.update_idletasks()
+    current_width = login_window.winfo_width()
+    max_ancho = 600
+    if current_width > max_ancho:
+        initial_pad = 50 + (current_width - max_ancho) // 2
+    else:
+        initial_pad = 50
+    contenedor.pack(expand=True, fill="both", padx=initial_pad, pady=50)
+
+    def limitar_ancho_login(event):
+        if event.widget == login_window:
+            max_ancho = 600  # Permite que el contenedor alcance 600px de ancho
+            if event.width > max_ancho:
+                nuevo_pad = 50 + (event.width - max_ancho) // 2
+                contenedor.pack_configure(padx=nuevo_pad)
+            else:
+                contenedor.pack_configure(padx=50)
+
+    login_window.bind("<Configure>", limitar_ancho_login)
+
+    ctk.CTkLabel(contenedor, text="Welcome Back", font=("Arial", 28, "bold"), text_color="white").pack(pady=(20, 10))
+    ctk.CTkLabel(contenedor, text="Panel Exclusivo para Administradores", font=("Arial", 12), text_color="#94A3B8").pack(pady=(0, 20))
+
+    entry_user = ctk.CTkEntry(contenedor, placeholder_text="Usuario / Correo", height=40, border_width=1, border_color="#1E3A8A", fg_color="#050C1A", text_color="white", placeholder_text_color="gray")
+    entry_user.pack(fill="x", padx=30, pady=10)
+
+    entry_pass = ctk.CTkEntry(contenedor, placeholder_text="Contraseña", show="*", height=40, border_width=1, border_color="#1E3A8A", fg_color="#050C1A", text_color="white", placeholder_text_color="gray")
+    entry_pass.pack(fill="x", padx=30, pady=10)
+
+    ctk.CTkButton(contenedor, text="Log In", height=30, fg_color="#F97316", hover_color="#EA580C", font=("Arial", 16, "bold"), text_color="white", command=lambda: iniciar_sesion(entry_user.get(), entry_pass.get(), login_window)).pack(fill="x", padx=30, pady=25)
+    
+    ctk.CTkLabel(contenedor, text="¿Eres nuevo dueño/administrador?", text_color="gray").pack(pady=5)
+    ctk.CTkButton(contenedor, text="Crear Cuenta", height=30, fg_color="transparent", border_width=1, border_color="#1E3A8A", text_color="white", hover_color="#1E40AF", command=lambda: draw_register_ui(login_window)).pack(pady=5)
+
+
+def draw_register_ui(login_window):
+    for widget in login_window.winfo_children():
+        if isinstance(widget, ctk.CTkFrame):
+            widget.destroy()
+
+    login_window.title("Register")
+
+    contenedor = ctk.CTkFrame(login_window, fg_color="#0A1931", corner_radius=15, border_width=1, border_color="#1E3A8A")
+    
+    login_window.update_idletasks()
+    current_width = login_window.winfo_width()
+    max_ancho = 600
+    if current_width > max_ancho:
+        initial_pad = 40 + (current_width - max_ancho) // 2
+    else:
+        initial_pad = 40
+    contenedor.pack(expand=True, fill="both", padx=initial_pad, pady=30)
+
+    def limitar_ancho_reg(event):
+        if event.widget == login_window:
+            max_ancho = 600  # Permite que las entradas alcancen máximo 600px
+            if event.width > max_ancho:
+                nuevo_pad = 40 + (event.width - max_ancho) // 2
+                contenedor.pack_configure(padx=nuevo_pad)
+            else:
+                contenedor.pack_configure(padx=40)
+                
+    login_window.bind("<Configure>", limitar_ancho_reg)
 
     ctk.CTkLabel(contenedor, text="Register", font=("Arial", 28, "bold"), text_color="white").pack(pady=(20, 25))
 
-    # Helper function for themed entries
     def create_theme_entry(container, placeholder, is_password=False):
         e = ctk.CTkEntry(
             container, 
@@ -1175,8 +1231,7 @@ def abrir_registro_admin(window_padre):
             exito = agregar_usuario_db(nombres, apellidos, usuario, fecha_nac, correo, num_reco, password)
             if exito:
                 messagebox.showinfo("Éxito", "Usuario registrado correctamente.\nIniciando sesión del administrador automáticamente...")
-                ventana_reg.withdraw()
-                window_padre.withdraw()
+                login_window.withdraw()
                 ventana.deiconify()
             else:
                 messagebox.showerror("Error", "No se pudo registrar. Es posible que el correo o usuario ya estén en uso.")
@@ -1186,7 +1241,7 @@ def abrir_registro_admin(window_padre):
     btn_registrar = ctk.CTkButton(
         contenedor, 
         text="Create Account", 
-        height=40,
+        height=30,
         fg_color="#F97316",
         hover_color="#EA580C",
         font=("Arial", 16, "bold"),
@@ -1198,19 +1253,18 @@ def abrir_registro_admin(window_padre):
     btn_cancel = ctk.CTkButton(
         contenedor,
         text="Cancel",
-        height=40,
+        height=30,
         fg_color="#1E3A8A",
         hover_color="#1E40AF",
         text_color="white",
-        command=ventana_reg.destroy
+        command=lambda: draw_login_ui(login_window)
     )
     btn_cancel.pack(fill="x", padx=30, pady=5)
 
 
 def mostrar_login():
     login_window = ctk.CTkToplevel()
-    login_window.title("Login")
-    login_window.geometry("500x600")
+    login_window.geometry("500x700")  # Tamaño base para que quepan ambos formularios
     
     login_window.lift()
     login_window.attributes("-topmost", True)
@@ -1222,23 +1276,7 @@ def mostrar_login():
     bg = AnimatedBackground(login_window, "assets/fluid_bg.png")
     bg.place(x=0, y=0, relwidth=1, relheight=1)
 
-    # UI Container
-    contenedor = ctk.CTkFrame(login_window, fg_color="#0A1931", corner_radius=15, border_width=1, border_color="#1E3A8A")
-    contenedor.pack(expand=True, fill="both", padx=50, pady=50)
-
-    ctk.CTkLabel(contenedor, text="Welcome Back", font=("Arial", 28, "bold"), text_color="white").pack(pady=(20, 10))
-    ctk.CTkLabel(contenedor, text="Panel Exclusivo para Administradores", font=("Arial", 12), text_color="#94A3B8").pack(pady=(0, 20))
-
-    entry_user = ctk.CTkEntry(contenedor, placeholder_text="Usuario / Correo", height=40, border_width=1, border_color="#1E3A8A", fg_color="#050C1A", text_color="white", placeholder_text_color="gray")
-    entry_user.pack(fill="x", padx=30, pady=10)
-
-    entry_pass = ctk.CTkEntry(contenedor, placeholder_text="Contraseña", show="*", height=40, border_width=1, border_color="#1E3A8A", fg_color="#050C1A", text_color="white", placeholder_text_color="gray")
-    entry_pass.pack(fill="x", padx=30, pady=10)
-
-    ctk.CTkButton(contenedor, text="Log In", height=40, fg_color="#F97316", hover_color="#EA580C", font=("Arial", 16, "bold"), text_color="white", command=lambda: iniciar_sesion(entry_user.get(), entry_pass.get(), login_window)).pack(fill="x", padx=30, pady=25)
-    
-    ctk.CTkLabel(contenedor, text="¿Eres nuevo dueño/administrador?", text_color="gray").pack(pady=5)
-    ctk.CTkButton(contenedor, text="Crear Cuenta", height=35, fg_color="transparent", border_width=1, border_color="#1E3A8A", text_color="white", hover_color="#1E40AF", command=lambda: abrir_registro_admin(login_window)).pack(pady=5)
+    draw_login_ui(login_window)
 
 
 
